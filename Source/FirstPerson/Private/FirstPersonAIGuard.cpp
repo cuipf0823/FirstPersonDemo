@@ -10,17 +10,16 @@ AFirstPersonAIGuard::AFirstPersonAIGuard()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
-	PawnSensingComp->bSeePawns = true;
-	PawnSensingComp->SetPeripheralVisionAngle(60);
-	PawnSensingComp->SightRadius = 5000.0f;
 	UE_LOG(LogTemp, Warning, TEXT("AFirstPersonAIGuard::AFirstPersonAIGuard"));
-	PawnSensingComp->OnSeePawn.AddDynamic(this, &AFirstPersonAIGuard::OnPawnSeen);
 }
 
 // Called when the game starts or when spawned
 void AFirstPersonAIGuard::BeginPlay()
 {
 	Super::BeginPlay();
+	//注册动态响应放在构造函数中, 无法响应; 放在BeginPlay中, 正常可以响应;暂时原因不知道?
+	PawnSensingComp->OnSeePawn.AddDynamic(this, &AFirstPersonAIGuard::OnPawnSeen);
+	PawnSensingComp->OnHearNoise.AddDynamic(this, &AFirstPersonAIGuard::OnHearNoise);
 }
 
 void AFirstPersonAIGuard::OnPawnSeen(APawn* SeenPawn)
@@ -31,6 +30,11 @@ void AFirstPersonAIGuard::OnPawnSeen(APawn* SeenPawn)
 		return;
 	}
 	DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColor::Yellow, false, 4.0f);
+}
+
+void AFirstPersonAIGuard::OnHearNoise(APawn* Instigator, const FVector& Location, float Volume)
+{
+
 }
 
 // Called every frame

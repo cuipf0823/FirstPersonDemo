@@ -30,4 +30,6 @@ public:
 	UFUNCTION()
 	void OnPawnSeen(APawn* SeenPawn);
 
+	UFUNCTION()
+	void OnHearNoise(APawn* Instigator, const FVector& Location, float Volume);
 };
