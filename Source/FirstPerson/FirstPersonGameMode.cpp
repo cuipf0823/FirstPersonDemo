@@ -15,3 +15,14 @@ AFirstPersonGameMode::AFirstPersonGameMode()
 	// use our custom HUD class
 	HUDClass = AFirstPersonHUD::StaticClass();
 }
+
+void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn)
+{
+	if (InstigatorPawn != nullptr)
+	{
+		//½ûÖ¹Íæ¼ÒÊäÈë
+		InstigatorPawn->DisableInput(nullptr);
+		UE_LOG(LogTemp, Warning, TEXT("Disable pawn Input!"));
+	}
+	OnMissionCompleted(InstigatorPawn);
+}

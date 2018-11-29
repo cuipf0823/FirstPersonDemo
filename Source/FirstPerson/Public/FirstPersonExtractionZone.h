@@ -7,6 +7,7 @@
 #include "FirstPersonExtractionZone.generated.h"
 
 class UBoxComponent;
+class UDecalComponent;
 UCLASS()
 class FIRSTPERSON_API AFirstPersonExtractionZone : public AActor
 {
@@ -19,6 +20,13 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* OverlapComp;
+
+	// Ìù»¨×é¼þ
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UDecalComponent* DecalComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	USoundBase* ObjectiveMissingSound;
 
 public:	
 	UFUNCTION()

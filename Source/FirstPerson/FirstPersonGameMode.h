@@ -13,6 +13,11 @@ class AFirstPersonGameMode : public AGameModeBase
 
 public:
 	AFirstPersonGameMode();
+
+	void CompleteMission(APawn* InstigatorPawn);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
+	void OnMissionCompleted(APawn* InstigatorPawn);
 };
 
 
