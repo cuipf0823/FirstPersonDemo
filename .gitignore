@@ -21,3 +21,8 @@ DerivedDataCache/
 Saved/
 Intermediate/
 *.sln
+
+Content/FirstPerson/
+Content/FirstPersonCPP/Maps/
+Content/Geometry/
+Content/StarterContent/

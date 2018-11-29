@@ -4,6 +4,7 @@
 #include "FirstPersonHUD.h"
 #include "FirstPersonCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 AFirstPersonGameMode::AFirstPersonGameMode()
 	: Super()
@@ -20,9 +21,31 @@ void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn)
 {
 	if (InstigatorPawn != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Disable pawn Input!"));
 		//禁止玩家输入
 		InstigatorPawn->DisableInput(nullptr);
-		UE_LOG(LogTemp, Warning, TEXT("Disable pawn Input!"));
+		
+		//设置视点移动
+		if (SpectatingViewPointClass)
+		{
+			TArray<AActor*> ReturnedActors;
+			//查找指定类型的Actor
+			UGameplayStatics::GetAllActorsOfClass(this, SpectatingViewPointClass, ReturnedActors);
+			if (ReturnedActors.Num() > 0)
+			{
+				AActor* NewViewTarget = ReturnedActors[0];
+				APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
+				if (PC != nullptr)
+				{
+					PC->SetViewTargetWithBlend(NewViewTarget, 0.5f, VTBlend_Cubic);
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SpectatingViewPointClass is invaild"));
+		}
+
 	}
 	OnMissionCompleted(InstigatorPawn);
 }
