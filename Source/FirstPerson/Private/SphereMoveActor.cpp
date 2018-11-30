@@ -59,7 +59,7 @@ void ASphereMoveActor::Tick(float DeltaTime)
 
 void ASphereMoveActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ASphereMoveActor::OnHit"));
+//	UE_LOG(LogTemp, Warning, TEXT("ASphereMoveActor::OnHit"));
 // 	if (GEngine)
 // 	{
 // 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("@cpf ASphereMoveActor::OnHit"));

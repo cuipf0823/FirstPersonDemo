@@ -23,10 +23,10 @@ void AFirstPersonAIGuard::BeginPlay()
 	//注册动态响应放在构造函数中, 无法响应; 放在BeginPlay中, 正常可以响应;暂时原因不知道?
 	PawnSensingComp->OnSeePawn.AddDynamic(this, &AFirstPersonAIGuard::OnPawnSeen);
 	PawnSensingComp->OnHearNoise.AddDynamic(this, &AFirstPersonAIGuard::OnHearNoise);
-
 	if (bPatrol)
 	{
 		MoveToNextPatrolPoint();
+		UE_LOG(LogTemp, Warning, TEXT("AFirstPersonAIGuard::BeginPlay"));
 	}
 }
 
@@ -71,6 +71,7 @@ void AFirstPersonAIGuard::MoveToNextPatrolPoint()
 	}
 
 	UNavigationSystem::SimpleMoveToActor(GetController(), CurrentPatrolPoint);
+	UE_LOG(LogTemp, Log, TEXT("AFirstPersonAIGuard::MoveToNextPatrolPoint %s"), CurrentPatrolPoint == nullptr ? TEXT("null") : TEXT("not null"));
 }
 
 void AFirstPersonAIGuard::OnPawnSeen(APawn* SeenPawn)
