@@ -17,11 +17,19 @@ public:
 	AFirstPersonAIGuard();
 
 protected:
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	UPawnSensingComponent* PawnSensingComp;
+
+	FRotator OriginRotator;
+	FTimerHandle TimeResetOrientation;
+
+protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UFUNCTION()
+	void ResetOrientation();
 
-	UPROPERTY(VisibleAnywhere, Category="AI")
-	UPawnSensingComponent* PawnSensingComp;
 
 public:	
 	// Called every frame
@@ -31,5 +39,5 @@ public:
 	void OnPawnSeen(APawn* SeenPawn);
 
 	UFUNCTION()
-	void OnHearNoise(APawn* Instigator, const FVector& Location, float Volume);
+	void OnHearNoise(APawn* NoiseInstigator, const FVector& Location, float Volume);
 };

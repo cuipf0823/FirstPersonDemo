@@ -7,6 +7,7 @@
 #include "FirstPersonCharacter.generated.h"
 
 class UInputComponent;
+class UPawnNoiseEmitterComponent;
 
 UCLASS(config=Game)
 class AFirstPersonCharacter : public ACharacter
@@ -49,6 +50,10 @@ public:
 	AFirstPersonCharacter();
 
 protected:
+	//ÉùÒô·¢ÉäÆ÷×é¼ş
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	UPawnNoiseEmitterComponent* NoiseEmitterComp;
+
 	virtual void BeginPlay();
 
 public:
