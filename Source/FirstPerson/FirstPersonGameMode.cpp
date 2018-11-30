@@ -17,7 +17,7 @@ AFirstPersonGameMode::AFirstPersonGameMode()
 	HUDClass = AFirstPersonHUD::StaticClass();
 }
 
-void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn)
+void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn, bool bGameOver /*= false*/)
 {
 	if (InstigatorPawn != nullptr)
 	{
@@ -47,5 +47,5 @@ void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn)
 		}
 
 	}
-	OnMissionCompleted(InstigatorPawn);
+	OnMissionCompleted(InstigatorPawn, bGameOver);
 }

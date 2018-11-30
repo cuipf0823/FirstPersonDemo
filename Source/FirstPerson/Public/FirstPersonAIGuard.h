@@ -7,6 +7,15 @@
 #include "FirstPersonAIGuard.generated.h"
 
 class UPawnSensingComponent;
+
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	Idle,
+	Suspicious,
+	Alerted
+};
+
 UCLASS()
 class FIRSTPERSON_API AFirstPersonAIGuard : public ACharacter
 {
@@ -23,12 +32,33 @@ protected:
 	FRotator OriginRotator;
 	FTimerHandle TimeResetOrientation;
 
+	EAIState GuardState;
+
+	UPROPERTY(EditInstanceOnly, Category = "AI")
+	bool bPatrol;
+
+	//第一个巡查点
+	UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "bPatrol"))
+	AActor* FirstPatrolPoint;
+
+	//第二个巡查点
+	UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "bPatrol"))
+	AActor* SecondPatrolPoint;
+
+	AActor* CurrentPatrolPoint;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UFUNCTION()
 	void ResetOrientation();
+
+	void SetGuardState(EAIState NewState);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
+	void OnChangedState(EAIState NewState);
+
+	void MoveToNextPatrolPoint();
 
 
 public:	

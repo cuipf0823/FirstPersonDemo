@@ -17,10 +17,10 @@ protected:
 public:
 	AFirstPersonGameMode();
 
-	void CompleteMission(APawn* InstigatorPawn);
+	void CompleteMission(APawn* InstigatorPawn, bool bGameOver = false);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
-	void OnMissionCompleted(APawn* InstigatorPawn);
+	void OnMissionCompleted(APawn* InstigatorPawn, bool bGameOver);
 };
 
 
