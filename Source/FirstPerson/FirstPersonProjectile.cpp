@@ -31,18 +31,27 @@ AFirstPersonProjectile::AFirstPersonProjectile()
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void AFirstPersonProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 	}
 	//产生粒子效果
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, GetActorLocation());
-	//子弹发生碰撞时候产生声音
-	MakeNoise(0.5, Instigator);
-	Destroy();
+
+	//保证只在服务器上运行
+	if (Role == ROLE_Authority)
+	{
+		//子弹发生碰撞时候产生声音
+		MakeNoise(0.5, Instigator);
+		Destroy();
+	}
+
 }
