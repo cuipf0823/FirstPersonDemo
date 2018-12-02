@@ -22,7 +22,7 @@ Saved/
 Intermediate/
 *.sln
 
-Content/FirstPerson/
+# Content/FirstPerson/
 # Content/FirstPersonCPP/Maps/
 Content/Geometry/
 Content/StarterContent/
