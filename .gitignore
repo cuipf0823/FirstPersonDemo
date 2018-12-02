@@ -23,7 +23,7 @@ Intermediate/
 *.sln
 
 Content/FirstPerson/
-Content/FirstPersonCPP/Maps/
+# Content/FirstPersonCPP/Maps/
 Content/Geometry/
 Content/StarterContent/
 Content/Characters
