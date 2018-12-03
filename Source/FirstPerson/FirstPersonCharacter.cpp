@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -356,4 +357,11 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		NewRotator.Pitch = RemoteViewPitch * 360.0f / 255;
 		FirstPersonCameraComponent->SetRelativeRotation(NewRotator);
 	}
+}
+
+void AFirstPersonCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AFirstPersonCharacter, bIsCarryingObjective);
+	//DOREPLIFETIME(AFirstPersonCharacter, bIsCarryingObjective, COND_OwnerOnly);
 }

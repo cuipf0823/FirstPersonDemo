@@ -21,6 +21,8 @@ AFirstPersonObjectiveActor::AFirstPersonObjectiveActor()
 	SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SphereComp->SetupAttachment(MeshComp);
 
+	//…Ë÷√actor∏¥÷∆
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
@@ -38,12 +40,18 @@ void AFirstPersonObjectiveActor::PlayEffects()
 
 void AFirstPersonObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
+
+	UE_LOG(LogTemp, Log, TEXT("AFirstPersonObjectiveActor::NotifyActorBeginOverlap"))
 	Super::NotifyActorBeginOverlap(OtherActor);
 	PlayEffects();
-	AFirstPersonCharacter* FPSCharacter = Cast<AFirstPersonCharacter>(OtherActor);
-	if (FPSCharacter != nullptr)
+
+	if (Role == ROLE_Authority)
 	{
-		FPSCharacter->bIsCarryingObjective = true;
-		Destroy();
+		AFirstPersonCharacter* FPSCharacter = Cast<AFirstPersonCharacter>(OtherActor);
+		if (FPSCharacter != nullptr)
+		{
+			FPSCharacter->bIsCarryingObjective = true;
+			Destroy();
+		}
 	}
 }
