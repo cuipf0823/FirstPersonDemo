@@ -35,7 +35,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
+	//Mesh1P->SetOnlyOwnerSee(true);
 	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
@@ -44,7 +44,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Create a gun mesh component
 	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
+	//FP_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
 	FP_Gun->bCastDynamicShadow = false;
 	FP_Gun->CastShadow = false;
 	// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
@@ -70,7 +70,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	// Create a gun and attach it to the right-hand VR controller.
 	// Create a gun mesh component
 	VR_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("VR_Gun"));
-	VR_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
+	//VR_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
 	VR_Gun->bCastDynamicShadow = false;
 	VR_Gun->CastShadow = false;
 	VR_Gun->SetupAttachment(R_MotionController);
@@ -146,6 +146,7 @@ void AFirstPersonCharacter::OnFire()
 {
 	ServerFire();
 
+	/*
 	// try and fire a projectile
 	if (ProjectileClass != nullptr)
 	{
@@ -175,6 +176,7 @@ void AFirstPersonCharacter::OnFire()
 		}
 	}
 
+	*/
 	// try and play the sound if specified
 	if (FireSound != nullptr)
 	{
@@ -195,6 +197,7 @@ void AFirstPersonCharacter::OnFire()
 
 void AFirstPersonCharacter::ServerFire_Implementation()
 {
+	UE_LOG(LogTemp, Log, TEXT("ServerFire_Implementation"));
 	// try and fire a projectile
 	if (ProjectileClass != nullptr)
 	{
@@ -211,7 +214,8 @@ void AFirstPersonCharacter::ServerFire_Implementation()
 			{
 				const FRotator SpawnRotation = GetControlRotation();
 				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+				const FVector SpawnLocation = 
+					((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
 
 				//Set Spawn Collision Handling Override
 				FActorSpawnParameters ActorSpawnParams;
@@ -340,4 +344,16 @@ bool AFirstPersonCharacter::EnableTouchscreenMovement(class UInputComponent* Pla
 		return true;
 	}
 	return false;
+}
+
+void AFirstPersonCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	if (!IsLocallyControlled())
+	{
+		FRotator NewRotator = FirstPersonCameraComponent->RelativeRotation;
+		NewRotator.Pitch = RemoteViewPitch * 360.0f / 255;
+		FirstPersonCameraComponent->SetRelativeRotation(NewRotator);
+	}
 }
