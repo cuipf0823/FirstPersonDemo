@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "FirstPersonGameState.h"
+#include "FirstPersonPlayerController.h"
 
 AFirstPersonGameMode::AFirstPersonGameMode()
 	: Super()
@@ -34,10 +35,13 @@ void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn, bool bGameOver
 			if (ReturnedActors.Num() > 0)
 			{
 				AActor* NewViewTarget = ReturnedActors[0];
-				APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
-				if (PC != nullptr)
+				for (auto it = GetWorld()->GetPlayerControllerIterator(); it; ++it)
 				{
-					PC->SetViewTargetWithBlend(NewViewTarget, 0.5f, VTBlend_Cubic);
+					AFirstPersonPlayerController* PC = Cast<AFirstPersonPlayerController>(it->Get());
+					if (PC != nullptr)
+					{
+						PC->SetViewTargetWithBlend(NewViewTarget, 0.5f, VTBlend_Cubic);
+					}
 				}
 			}
 		}
