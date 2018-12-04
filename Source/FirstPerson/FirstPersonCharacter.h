@@ -85,7 +85,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint32 bUsingMotionControllers : 1;
 
-	UPROPERTY(Reliable, BlueprintReadOnly, Category = Gameplay)
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = Gameplay)
 	bool bIsCarryingObjective;
 
 protected:

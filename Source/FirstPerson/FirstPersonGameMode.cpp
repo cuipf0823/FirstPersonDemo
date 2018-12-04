@@ -5,16 +5,18 @@
 #include "FirstPersonCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "FirstPersonGameState.h"
 
 AFirstPersonGameMode::AFirstPersonGameMode()
 	: Super()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPersonCPP/Blueprints/FirstPersonCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPersonCPP/Blueprints/BP_FirstPersonCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
 	// use our custom HUD class
 	HUDClass = AFirstPersonHUD::StaticClass();
+	GameStateClass = AFirstPersonGameState::StaticClass();
 }
 
 void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn, bool bGameOver /*= false*/)
@@ -22,8 +24,6 @@ void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn, bool bGameOver
 	if (InstigatorPawn != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Disable pawn Input!"));
-		//禁止玩家输入
-		InstigatorPawn->DisableInput(nullptr);
 		
 		//设置视点移动
 		if (SpectatingViewPointClass)
@@ -46,6 +46,13 @@ void AFirstPersonGameMode::CompleteMission(APawn* InstigatorPawn, bool bGameOver
 			UE_LOG(LogTemp, Warning, TEXT("SpectatingViewPointClass is invaild"));
 		}
 
+	}
+
+	AFirstPersonGameState* GS = GetGameState<AFirstPersonGameState>();
+	if (GS != nullptr)
+	{
+
+		GS->MulticastOnMissionComplete(InstigatorPawn, bGameOver);
 	}
 	OnMissionCompleted(InstigatorPawn, bGameOver);
 }
